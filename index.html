@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GharKhoj – Property demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f7f6;--card:#fff;--ink:#14211f;--mute:#5d6e6b;--line:#d9e2e0;--brand:#0f5c57;--accent:#e8a317;--on-brand:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1716;--card:#16231f;--ink:#e8f0ee;--mute:#9db2ae;--line:#2a3d39;--brand:#3fb5ab;--on-brand:#06201d}}
+:root[data-theme="dark"]{--bg:#0e1716;--card:#16231f;--ink:#e8f0ee;--mute:#9db2ae;--line:#2a3d39;--brand:#3fb5ab;--on-brand:#06201d}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px clamp(16px,4vw,48px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.5px}.logo span{color:var(--brand)}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+button,select,input,textarea{font:inherit;color:inherit}
+.btn{background:var(--brand);color:var(--on-brand);border:0;border-radius:8px;padding:9px 16px;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:focus-visible,select:focus-visible,input:focus-visible,.card:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.hero{padding:clamp(28px,6vw,64px) clamp(16px,4vw,48px) 24px;max-width:1100px}
+h1{font-size:clamp(30px,5.5vw,56px);line-height:1.05;margin:0 0 10px;letter-spacing:-1.5px;font-weight:800;max-width:14ch}
+.hero p{color:var(--mute);margin:0 0 22px;max-width:52ch}
+.search{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;max-width:1000px}
+.search label{font-size:13px;color:var(--mute);display:block;margin-bottom:3px}
+.search select,.search input{width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.tabs{display:flex;gap:6px;margin:18px clamp(16px,4vw,48px) 0}
+.tab{padding:8px 18px;border-radius:99px;border:1px solid var(--line);background:transparent;cursor:pointer;font-weight:600}
+.tab[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+main{padding:16px clamp(16px,4vw,48px) 56px}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column}
+.pic{height:140px;display:grid;place-items:center;position:relative}
+.pic svg{width:56px;height:56px;opacity:.85}
+.tag{position:absolute;left:10px;top:10px;background:var(--bg);color:var(--ink);font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px}
+.fav{position:absolute;right:8px;top:6px;background:none;border:0;font-size:22px;cursor:pointer;color:#fff;text-shadow:0 1px 3px #0008}
+.fav[aria-pressed="true"]{color:#ff5a5f}
+.body{padding:12px 14px 14px}
+.price{font-size:22px;font-weight:800}.price small{font-size:13px;color:var(--mute);font-weight:400}
+.body h3{margin:2px 0;font-size:16px}.meta{color:var(--mute);font-size:14px}
+.empty{padding:40px;text-align:center;color:var(--mute);border:1px dashed var(--line);border-radius:12px}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);width:min(480px,94vw);padding:20px}
+dialog::backdrop{background:#0008}
+dialog h2{margin:0 0 4px}dialog form{display:grid;gap:10px;margin-top:12px}
+dialog input,dialog select,dialog textarea{width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.row{display:flex;gap:8px;justify-content:flex-end}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;font-weight:600}
+.pend{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+@media (prefers-reduced-motion:no-preference){.card{transition:transform .15s}.card:hover{transform:translateY(-3px)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Ghar<span>Khoj</span> <small style="font-weight:400;color:var(--mute);font-size:13px">demo</small></div>
+  <nav>
+    <button class="btn ghost" id="favBtn">Saved (<span id="favN">0</span>)</button>
+    <button class="btn ghost" id="admBtn">Admin queue</button>
+    <button class="btn" id="postBtn">Post property free</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Apne shehar mein ghar dhundhiye</h1>
+  <p>Rent, kharidna ya PG. Owner se seedha baat karein, bina broker ke.</p>
+  <div class="search">
+    <div><label for="loc">Locality</label><select id="loc"><option value="">All localities</option></select></div>
+    <div><label for="bhk">BHK</label><select id="bhk"><option value="">Any</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+    <div><label for="max">Max budget (Rs)</label><input id="max" type="number" min="0" placeholder="e.g. 15000"></div>
+    <div><label for="sort">Sort</label><select id="sort"><option value="new">Newest</option><option value="lo">Price low to high</option><option value="hi">Price high to low</option></select></div>
+  </div>
+</section>
+
+<div class="tabs" role="group" aria-label="Listing type">
+  <button class="tab" data-t="RENT" aria-pressed="true">Rent</button>
+  <button class="tab" data-t="SELL" aria-pressed="false">Buy</button>
+  <button class="tab" data-t="PG" aria-pressed="false">PG</button>
+</div>
+
+<main>
+  <div class="bar"><span id="count"></span></div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<dialog id="detail"></dialog>
+
+<dialog id="post">
+  <h2>Post your property</h2>
+  <div class="meta">Goes to the admin queue first, then goes live.</div>
+  <form id="postForm" method="dialog">
+    <input name="title" placeholder="Title, e.g. 2 BHK near market" required>
+    <select name="listing"><option value="RENT">For rent</option><option value="SELL">For sale</option><option value="PG">PG</option></select>
+    <input name="locality" placeholder="Locality" required>
+    <input name="bhk" type="number" min="1" max="6" placeholder="BHK" required>
+    <input name="area" type="number" min="50" placeholder="Area (sq ft)" required>
+    <input name="price" type="number" min="1" placeholder="Price / rent (Rs)" required>
+    <input name="phone" placeholder="Mobile number" required>
+    <div class="row"><button type="button" class="btn ghost" data-close>Cancel</button><button class="btn" type="submit">Submit for approval</button></div>
+  </form>
+</dialog>
+
+<dialog id="admin"><h2>Admin queue</h2><div class="meta">Demo of the approval flow.</div><div id="pending"></div><div class="row" style="margin-top:12px"><button class="btn ghost" data-close>Close</button></div></dialog>
+
+<script>
+var BASE=[
+ ["2 BHK flat near market","RENT","Vijay Nagar",2,950,14000,1,1],
+ ["1 BHK budget flat","RENT","AB Road",1,520,6500,0,1],
+ ["3 BHK independent house","SELL","Bypass Road",3,1800,6500000,0,1],
+ ["PG for working men","PG","AB Road",1,150,5500,1,1],
+ ["2 BHK in gated society","SELL","Vijay Nagar",2,1100,3800000,1,1],
+ ["3 BHK furnished flat","RENT","Scheme 54",3,1400,22000,1,1],
+ ["Girls PG, meals included","PG","Scheme 54",1,140,7000,1,1],
+ ["Plot-side 4 BHK villa","SELL","Bypass Road",4,2800,12500000,0,1]
+].map(function(a,i){return{id:i+1,title:a[0],type:a[1],loc:a[2],bhk:a[3],area:a[4],price:a[5],furn:!!a[6],ok:!!a[7],phone:"90000000"+(10+i)}});
+var data=BASE.slice(),tab="RENT",favs=[],showFav=false;
+try{favs=JSON.parse(localStorage.getItem("gk_favs")||"[]")}catch(e){}
+var $=function(s){return document.querySelector(s)};
+var tints=["#cfe7e3","#f3e3b8","#d9dff3","#f1d4cc"];
+function inr(n){return n>=1e7?(n/1e7).toFixed(2)+" Cr":n>=1e5?(n/1e5).toFixed(2)+" Lakh":n.toLocaleString("en-IN")}
+function priceTxt(p){return "Rs "+inr(p.price)+(p.type==="SELL"?"":"<small>/month</small>")}
+var HOUSE='<svg viewBox="0 0 24 24" fill="none" stroke="#0f5c57" stroke-width="1.6"><path d="M3 11l9-7 9 7v9H3z"/><path d="M9 20v-6h6v6"/></svg>';
+function fillLocs(){var s=$("#loc"),v=s.value,l=[...new Set(data.filter(function(p){return p.ok}).map(function(p){return p.loc}))].sort();
+ s.innerHTML='<option value="">All localities</option>'+l.map(function(x){return"<option>"+x+"</option>"}).join("");s.value=v}
+function list(){var loc=$("#loc").value,bhk=+$("#bhk").value,mx=+$("#max").value,so=$("#sort").value;
+ var r=data.filter(function(p){return p.ok&&(showFav?favs.indexOf(p.id)>-1:p.type===tab)&&(!loc||p.loc===loc)&&(!bhk||p.bhk===bhk)&&(!mx||p.price<=mx)});
+ r.sort(function(a,b){return so==="lo"?a.price-b.price:so==="hi"?b.price-a.price:b.id-a.id});return r}
+function render(){var r=list();$("#favN").textContent=favs.length;
+ $("#count").textContent=(showFav?"Saved properties: ":"")+r.length+" properties found";
+ $("#grid").innerHTML=r.length?r.map(function(p){var f=favs.indexOf(p.id)>-1;
+  return '<div class="card" tabindex="0" data-id="'+p.id+'"><div class="pic" style="background:'+tints[p.id%4]+'">'+HOUSE+'<span class="tag">'+(p.type==="SELL"?"For sale":p.type==="RENT"?"For rent":"PG")+'</span><button class="fav" data-fav="'+p.id+'" aria-pressed="'+f+'" aria-label="Save property">'+(f?"\u2665":"\u2661")+'</button></div><div class="body"><div class="price">'+priceTxt(p)+'</div><h3>'+esc(p.title)+'</h3><div class="meta">'+esc(p.loc)+' | '+p.bhk+' BHK | '+p.area+' sq ft'+(p.furn?' | Furnished':'')+'</div></div></div>'}).join(""):'<div class="empty">Koi property nahi mili. Filters badal kar dekhiye.</div>'}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function toast(t){var d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},2200)}
+function openDetail(id){var p=data.find(function(x){return x.id===id});
+ $("#detail").innerHTML='<h2>'+esc(p.title)+'</h2><div class="price">'+priceTxt(p)+'</div><div class="meta">'+esc(p.loc)+' | '+p.bhk+' BHK | '+p.area+' sq ft | '+(p.furn?"Furnished":"Unfurnished")+'</div><form id="enq" method="dialog"><input name="n" placeholder="Your name" required><input name="m" placeholder="Your mobile" required><div class="row"><button type="button" class="btn ghost" data-close>Close</button><button class="btn" type="submit">Get owner contact</button></div></form>';
+ $("#detail").showModal()}
+function pend(){var q=data.filter(function(p){return!p.ok});
+ $("#pending").innerHTML=q.length?q.map(function(p){return'<div class="pend"><span>'+esc(p.title)+' <span class="meta">('+esc(p.loc)+')</span></span><button class="btn" data-ap="'+p.id+'">Approve</button></div>'}).join(""):'<div class="empty" style="margin-top:12px">Nothing waiting for approval.</div>'}
+document.addEventListener("click",function(e){var t=e.target;
+ if(t.closest("[data-close]")){t.closest("dialog").close();return}
+ var fv=t.closest("[data-fav]");if(fv){e.stopPropagation();var id=+fv.dataset.fav,i=favs.indexOf(id);i>-1?favs.splice(i,1):favs.push(id);try{localStorage.setItem("gk_favs",JSON.stringify(favs))}catch(x){}render();return}
+ var c=t.closest(".card");if(c){openDetail(+c.dataset.id);return}
+ var ap=t.closest("[data-ap]");if(ap){data.find(function(p){return p.id===+ap.dataset.ap}).ok=true;pend();fillLocs();render();toast("Approved. Listing is live.");return}
+ var tb=t.closest(".tab");if(tb){tab=tb.dataset.t;showFav=false;document.querySelectorAll(".tab").forEach(function(b){b.setAttribute("aria-pressed",b===tb)});render()}
+});
+document.addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.classList.contains("card"))openDetail(+e.target.dataset.id)});
+["#loc","#bhk","#max","#sort"].forEach(function(s){$(s).addEventListener("input",render)});
+$("#postBtn").onclick=function(){$("#post").showModal()};
+$("#admBtn").onclick=function(){pend();$("#admin").showModal()};
+$("#favBtn").onclick=function(){showFav=!showFav;document.querySelectorAll(".tab").forEach(function(b){b.setAttribute("aria-pressed",!showFav&&b.dataset.t===tab)});render()};
+$("#postForm").addEventListener("submit",function(e){var f=new FormData(e.target);
+ data.push({id:data.length+1,title:f.get("title"),type:f.get("listing"),loc:f.get("locality"),bhk:+f.get("bhk"),area:+f.get("area"),price:+f.get("price"),furn:false,ok:false,phone:f.get("phone")});
+ e.target.reset();toast("Submitted. Waiting for admin approval.")});
+$("#detail").addEventListener("submit",function(){var p=data.find(function(x){return x.title&&$("#detail h2").textContent===x.title});toast("Owner contact: "+(p?p.phone:""))});
+fillLocs();render();
+</script>
+</body>
+</html>
